@@ -1,0 +1,29 @@
+{
+  "manifest_version": 3,
+  "name": "Strikor Autofill",
+  "version": "1.8",
+  "description": "Autofills fields in ServiceNow Incident page",
+  "permissions": ["activeTab", "scripting"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "commands": {
+    "trigger-autofill": {
+      "suggested_key": {
+        "default": "Alt+S"
+      },
+      "description": "Trigger ServiceNow Autofill"
+    }
+  },
+  "icons": {
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["content.js"],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}
