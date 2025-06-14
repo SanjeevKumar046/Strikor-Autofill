@@ -1,5 +1,21 @@
 console.log("Injected content.js: attempting autofill...");
 
+/* ===============================
+      USER-CONFIGURABLE VALUES
+   =============================== */
+const autofillValues = {
+  contactNumber: "03327775712",
+  contactType: "email",
+  state: "3", // 1 = Open, 2 = In Progress, 3 = On Hold, etc.
+  assignmentGroup: "MSHS-Linux",
+  assignedTo: "Sanjeev Kumar",
+  location: "157 East 72st  FPA-OBGYN"
+};
+
+/* ===============================
+     Core Logic Below (Don't Edit)
+   =============================== */
+
 function waitForElement(selector, timeout = 10000) {
   return new Promise((resolve, reject) => {
     const interval = 100;
@@ -47,14 +63,14 @@ function fillIncidentForm() {
 
       // 1. Contact Number
       contactNumberInput.focus();
-      contactNumberInput.value = "03327775712";
+      contactNumberInput.value = autofillValues.contactNumber;
       contactNumberInput.dispatchEvent(new Event("input", { bubbles: true }));
       contactNumberInput.dispatchEvent(new Event("change", { bubbles: true }));
 
-      // 2. Contact Type (if forced — optional)
+      // 2. Contact Type
       const contactType = document.querySelector('#incident\\.contact_type');
       if (contactType && !contactType.disabled) {
-        contactType.value = "email"; // or "email", etc.
+        contactType.value = autofillValues.contactType;
         contactType.dispatchEvent(new Event("change", { bubbles: true }));
       } else {
         console.warn("⚠️ Contact Type is read-only or disabled — skipping");
@@ -63,18 +79,14 @@ function fillIncidentForm() {
       // 3. State
       const stateDropdown = document.querySelector('#incident\\.state');
       if (stateDropdown) {
-        stateDropdown.value = "3"; // e.g., 2 = In Progress
+        stateDropdown.value = autofillValues.state;
         stateDropdown.dispatchEvent(new Event("change", { bubbles: true }));
       }
 
-      // 4. Assignment Group
-      fillReferenceField('#sys_display\\.incident\\.assignment_group', "MSHS-Linux");
-
-      // 5. Assigned To
-      fillReferenceField('#sys_display\\.incident\\.assigned_to', "Sanjeev Kumar");
-
-      // 6. Location
-      fillReferenceField('#sys_display\\.incident\\.location', " 157 East 72st  FPA-OBGYN  ");
+      // 4–6: Reference Fields
+      fillReferenceField('#sys_display\\.incident\\.assignment_group', autofillValues.assignmentGroup);
+      fillReferenceField('#sys_display\\.incident\\.assigned_to', autofillValues.assignedTo);
+      fillReferenceField('#sys_display\\.incident\\.location', autofillValues.location);
     })
     .catch(err => {
       console.warn("Contact number field never appeared ❌", err);
